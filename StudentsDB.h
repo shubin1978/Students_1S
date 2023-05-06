@@ -8,15 +8,17 @@
 #include "Parser.h"
 
 struct StudentsDB{
-    const char GENERAL_DELIMITER = '|';
-    const char SUBJECT_DELIMITER = ';';
-    const char SUBJECT_NAME_DELIMITER = ':';
-    const char MARK_DELIMITER = ',';
 
     const string PATH = "students.db";
     int id;
 
    map<int,Student> students;
+
+   // CRUD
+    // *Create
+    // *Read
+    // *Update
+    // *Delete
 
    void Add(Student student){
        id += 1;
@@ -26,7 +28,11 @@ struct StudentsDB{
    }
 
    void Update(int id){
+       // TODO
+   };
 
+   void Delete(int id){
+       // TODO
    };
 
    void Init(){
@@ -45,45 +51,10 @@ struct StudentsDB{
                return;
            }
 
-           // line = "0|Ivanov|Anton|History:3,4,3,;Math:4,5,";
-           int id_ = stoi(Parser(line,GENERAL_DELIMITER));
-           //id_ = 0;
-           //line = "Ivanov|Anton|History:3,4,3,;Math:4,5,";
-
-           string last_name_ = Parser(line,GENERAL_DELIMITER);
-           //last_name_ = "Ivanov";
-           //line = "Anton|History:3,4,3,;Math:4,5,";
-
-           string first_name_ = Parser(line,GENERAL_DELIMITER);
-           //first_name_ = "Anton";
-           //line = "History:3,4,3,;Math:4,5,";
-
-
-           string subjects_ = line;
-           //subjects_ = "History:3,4,3,;Math:4,5,";
-
-           do{
-               string subject_ = Parser(subjects_,SUBJECT_DELIMITER);
-                // subject_ = "History:3,4,3,";
-               //  subjects_ = "Math:4,5,";
-
-               string subject_name_ = Parser(subject_,SUBJECT_NAME_DELIMITER);
-               // subject_name = History";
-               // subject_ = "3,4,3,";
-
-               string marks_ = subject_;
-               // marks = "3,4,3,";
-               do {
-                   int mark_ = stoi(Parser(marks_,MARK_DELIMITER));
-                   //mark_ = 3,
-                   //marks_ = "4,3,";
-
-               } while (marks_ != "");
-
-
-           } while (subjects_ != "");
-
+           auto student = ParserStudent(line);
+           students.insert(pair<int, Student> (student.id,student));
        }
+       id = students.end()->second.id;
    };
 
    void Export(){
@@ -103,6 +74,14 @@ struct StudentsDB{
        }
 
        file.close();
+   }
+
+   vector<Student> ToVector(){
+       vector<Student> result;
+       for (auto student : students) {
+           result.push_back(student.second);
+       }
+       return result;
    }
 
 };
